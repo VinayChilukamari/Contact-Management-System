@@ -1,10 +1,8 @@
 import json
 
 def display_contacts():
-    with open("contacts.json","r") as f:
-        people=f.read()
-    
-    print(people)
+    for i in people: 
+        print(i)
 
 def add_person():
     person={}
@@ -17,9 +15,12 @@ def add_person():
     
     people.append(person)
     
+    with open("contacts.json", "w") as f:
+        json.dump({"contacts": people},f)
+    
 def delete_person(people):
     for index, person in enumerate(people):
-        print(f"{index + 1} : {person['name']} | {person['age']} | {person['Email-ID']}")
+        print(f"{index + 1} : {person['name']} | {person['age']} | {person['email-ID']}")
         
     if len(people)==0:
         print("Contact list is empty")
@@ -34,18 +35,53 @@ def delete_person(people):
             except Exception as e:
                 print("Invalid number, enter an integer value")
         people.pop(number-1)
+    with open("contacts.json", "w") as f:
+        json.dump({"contacts": people},f)
 
 def search_person(people):
-    search_name=input("Enter the name of the person you want to search: ").capitalize()
-    result=[]
-    for person in people:
-        if search_name == person["name"]:
-            result.append(person)
+    while True:
+        result=[]
+        search_by=input("Do you want to search by 'NAME', 'AGE', 'EMAIL-ID'? or enter 'q' to exit: ").lower()
+        if search_by=='name':
+            first_or_last=input("Do you want to search by 'FIRST NAME' or 'LAST NAME'? (first/last): ").lower()
+            if first_or_last=='first name' or first_or_last=='first':
+                first_name=input("Enter the 'first name' of the person you want to search: ")
+                for person in people:
+                    if first_name == person["name"][0:len(first_name)]:
+                        result.append(person)
+                break
+            elif first_or_last =='last name' or first_or_last=='last':
+                last_name=input("Enter the 'last name' of the person you want to search: ")
+                print(last_name)
+                for person in people:
+                    if last_name == person["name"][-len(last_name):]:
+                        result.append(person)
+                break
+        elif search_by=='age':
+            try:
+                age_inp=float(input("Enter the 'age' of the person you want to search: "))
+                for person in people:
+                    if age_inp==person['age']:
+                        result.append(person)
+                break
+            except Exception as e:
+                print(e)
+        elif search_by=='email-id':
+            pass
+        elif search_by =='q':
+            break
+            
+        
     if len(result)==0:
-        print("Name not found")
+        print("Person not found.\nNote: search is case-sensitive")
     else:
         print(result)
+            
+                
+    
         
+def change(people):
+    pass
 
 print("Hi, WELCOME to the Contact Management System")
 
@@ -55,7 +91,7 @@ with open("contacts.json", "r") as f:
 while True:
     # size=len(people)
     print(f"Contact list size is: {len(people)}")
-    action=input("Do you want to 'VIEW', 'ADD', 'DELETE', 'SEARCH' a person, or Enter 'q' to exit: ").lower()
+    action=input("Do you want to 'VIEW', 'ADD', 'CHANGE', 'DELETE', 'SEARCH' a person, or Enter 'q' to exit: ").lower()
     if action=='add':
         add_person()
         print("Person added!")
@@ -66,12 +102,12 @@ while True:
         search_person(people)
     elif action=='view':
         display_contacts()
+    elif action=='change':
+        change(people)
     elif action=='q':
         break
     else:
         print("Invalid response, try again")
     
-with open("contacts.json", "w") as f:
-    json.dump({"contacts": people},f)
 
 # print(people)
