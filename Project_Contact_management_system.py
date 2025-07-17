@@ -1,8 +1,33 @@
 import json
 
+def json_read():
+    with open("contacts.json", "r") as f:
+        return json.load(f)["contacts"]
+
+def json_dump():
+    with open("contacts.json", "w") as f:
+        json.dump({"contacts": people},f)
+
 def display_contacts():
-    for i in people: 
-        print(i)
+    # for index, person in enumerate(people):
+    #     print(f"{index + 1} : {person['name']} | {person['age']} | {person['email-ID']}")
+    for index, person in enumerate(people):
+        print(index+1,"-->",person)
+
+def index_num_inp(text):
+    while True:
+        try:
+            number=int(input(f"Enter the number of the person you want to {text}: "))
+            if number<=0 or number>len(people):
+                print()
+                print("Invalid number, index out range")
+            else:
+                break
+        except Exception as e:
+            print()
+            print("Invalid number, enter an integer value")
+
+    return number
 
 def add_person():
     person={}
@@ -15,34 +40,18 @@ def add_person():
     
     people.append(person)
     
-    with open("contacts.json", "w") as f:
-        json.dump({"contacts": people},f)
+    json_dump()
     
 def delete_person(people):
-    for index, person in enumerate(people):
-        print(f"{index + 1} : {person['name']} | {person['age']} | {person['email-ID']}")
+    display_contacts()
         
     if len(people)==0:
         print()
         print("Contact list is empty")
-        print()
     else:
-        while True:
-            try:
-                number=int(input("Enter the number of the person you want to delete: ")) 
-                if number<=0 or number>len(people):
-                    print()
-                    print("Invalid number, index out range")
-                    print()
-                else:
-                    break
-            except Exception as e:
-                print()
-                print("Invalid number, enter an integer value")
-                print()
+        number=index_num_inp('delete') # function to get the index number of the list to delete
         people.pop(number-1)
-    with open("contacts.json", "w") as f:
-        json.dump({"contacts": people},f)
+    json_dump()
 
 def search_person(people):
     while True:
@@ -80,14 +89,20 @@ def search_person(people):
                 print("Invalid search")
                 print()
         elif search_by=='age':
-                age_inp=input("Enter the 'age' of the person you want to search: ")
-                print()
-                for person in people:
-                    if age_inp==person['age']:
-                        result.append(person)
-                break
+            age_inp=input("Enter the 'age' of the person you want to search: ")
+            print()
+            for person in people:
+                if age_inp==person['age']:
+                    result.append(person)
+            break
         elif search_by=='email-id':
-            pass
+            email_inp=input("Enter the 'email-ID' of the person you want to search: ")
+            print()
+            for person in people:
+                if email_inp==person['email-ID']:
+                    result.append(person)
+            break
+            
         elif search_by =='q':
             break
         else:
@@ -101,19 +116,83 @@ def search_person(people):
         print()
     else:
         print()
-        print(result)
+        for i in result:
+            print(i)
         print()
             
-                
-    
-        
 def change(people):
-    pass
+    display_contacts()
+    number=index_num_inp('change')
+    # print(number)
+    for person in people:
+        change_index=number-1
+        if change_index==people.index(person):
+            while True:
+                change_inp=input("Specify what do you want to change? 'NAME', 'AGE', or 'EMAIL-ID'?: ").lower()
+                if change_inp=='name':
+                    o_name=people[change_index]['name']
+                    u_name=''
+                
+                    change_by=input("Do you want to change by 'FIRST NAME', 'LAST NAME', or 'FULL NAME'? (first/last/full): ").lower()
+                    if change_by=='first name' or change_by=='first':
+                        update=o_name.split()
+                        update.remove(update[0])
+                        update.insert(0,input("Enter the updated name: "))
+                        u_name=' '.join(update)
+                        people[change_index]['name']=u_name
+                        json_dump()
+                        print()
+                        print("First name updated")
+                        break
+                    elif change_by=='last name' or change_by=='last':
+                        
+                        update=o_name.split()
+                        if len(update)==1:
+                            print("Last name does not exist, please change in full name")
+                            break
+                        else:
+                            update.remove(update[1])
+                            update.insert(1,input("Enter the updated name: "))
+                            u_name=' '.join(update)
+                            people[change_index]['name']=u_name
+                            json_dump()
+                            print()
+                            print("Last name updated")
+                            break
+                    elif change_by=='full name' or change_by=='full':
+                        
+                        u_name=input("Enter the updated name: ")
+                        people[change_index]['name']=u_name
+                        json_dump()
+                        print()
+                        print("Name updated")
+                        break
+                    else:
+                        print("Invalid input")
+                        
+                    
+                elif change_inp=='age':
+                    people[change_index]['age']=input("Enter the updated age: ")
+                    json_dump()
+                    print()
+                    print("Age updated")
+                    break
+                    
+                elif change_inp=='email-id':
+                    people[change_index]['email-ID']=input("Enter the updated email-ID: ")
+                    json_dump()
+                    print()
+                    print("Email-ID updated")
+                    break
+                else:
+                    print("Invalid input, try again")
+                
+        
 
 print("Hi, WELCOME to the Contact Management System")
 
-with open("contacts.json", "r") as f:
-    people = json.load(f)["contacts"]
+people= json_read()
+# print(people)
    
 while True:
     # size=len(people)
