@@ -33,11 +33,11 @@ def index_num_inp(text):# this funtion allows only integer input by validating i
 
 def add_person():# this function allows user to add new person to contacts.json file.
     person={}
-    name=input("Enter your Name: ")
+    name=input("Enter your Name: ").strip()
     person['name']=(name)
-    age=input("Enter your Age: ")
+    age=input("Enter your Age: ").strip()
     person['age']=age
-    email_id=input("Enter your E-mail ID: ")
+    email_id=input("Enter your E-mail ID: ").strip()
     person['email-ID']=email_id
     
     people.append(person)
@@ -65,14 +65,14 @@ def search_person(people):# this functions allows user to search the person from
             search_name=input("Do you want to search by 'FIRST NAME', 'LAST NAME', or 'FULL NAME'? (first/last/full): ").lower()
             if search_name=='first name' or search_name=='first':
                 print()
-                first_name=input("Enter the 'first name' of the person you want to search: ")
+                first_name=input("Enter the 'first name' of the person you want to search: ").strip()
                 for person in people:
                     if first_name == person["name"][0:len(first_name)]:
                         result.append(person)
                 break
             elif search_name =='last name' or search_name=='last':
                 print()
-                last_name=input("Enter the 'last name' of the person you want to search: ")
+                last_name=input("Enter the 'last name' of the person you want to search: ").strip()
                 # print(last_name)
                 for person in people:
                     if last_name == person["name"][-len(last_name):]:
@@ -80,7 +80,7 @@ def search_person(people):# this functions allows user to search the person from
                 break
             elif search_name =='full name' or search_name=='full':
                 print()
-                last_name=input("Enter the 'full name' of the person you want to search: ")
+                last_name=input("Enter the 'full name' of the person you want to search: ").strip()
                 for person in people:
                     if last_name == person["name"]:
                         result.append(person)
@@ -90,14 +90,14 @@ def search_person(people):# this functions allows user to search the person from
                 print("Invalid search")
         elif search_by=='age':
             print()
-            age_inp=input("Enter the 'age' of the person you want to search: ")
+            age_inp=input("Enter the 'age' of the person you want to search: ").strip()
             for person in people:
                 if age_inp==person['age']:
                     result.append(person)
             break
         elif search_by=='email-id':
             print()
-            email_inp=input("Enter the 'email-ID' of the person you want to search: ")
+            email_inp=input("Enter the 'email-ID' of the person you want to search: ").strip()
             for person in people:
                 if email_inp==person['email-ID']:
                     result.append(person)
@@ -138,7 +138,7 @@ def change(people):# this functions allows user to change persos's attribute fro
                         update=o_name.split()
                         update.remove(update[0])
                         print()
-                        update.insert(0,input("Enter the updated name: "))
+                        update.insert(0,input("Enter the updated name: ").strip())
                         u_name=' '.join(update)
                         people[change_index]['name']=u_name
                         json_dump()
@@ -155,7 +155,7 @@ def change(people):# this functions allows user to change persos's attribute fro
                         else:
                             update.remove(update[1])
                             print()
-                            update.insert(1,input("Enter the updated name: "))
+                            update.insert(1,input("Enter the updated name: ").strip())
                             u_name=' '.join(update)
                             people[change_index]['name']=u_name
                             json_dump()
@@ -164,7 +164,7 @@ def change(people):# this functions allows user to change persos's attribute fro
                             break
                     elif change_by=='full name' or change_by=='full':
                         print()
-                        u_name=input("Enter the updated name: ")
+                        u_name=input("Enter the updated name: ").strip()
                         people[change_index]['name']=u_name
                         json_dump()
                         print()
@@ -176,7 +176,7 @@ def change(people):# this functions allows user to change persos's attribute fro
                     
                 elif change_inp=='age':
                     print()
-                    people[change_index]['age']=input("Enter the updated age: ")
+                    people[change_index]['age']=input("Enter the updated age: ").strip()
                     json_dump()
                     print()
                     print("Age updated")
@@ -184,7 +184,7 @@ def change(people):# this functions allows user to change persos's attribute fro
                     
                 elif change_inp=='email-id':
                     print()
-                    people[change_index]['email-ID']=input("Enter the updated email-ID: ")
+                    people[change_index]['email-ID']=input("Enter the updated email-ID: ").strip()
                     json_dump()
                     print()
                     print("Email-ID updated")
