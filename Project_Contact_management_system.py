@@ -1,3 +1,6 @@
+
+# Project: Contact Management System ~ project idea credit -tech with tim
+
 import json
 # contacts.json file is used throughout this code
 
